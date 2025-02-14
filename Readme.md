@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов»
 
-* Студент: [Анна Куренкова](https://up.htmlacademy.ru/nodejs-api/9/user/165732).
-* Наставник: `Неизвестно`.
+- Студент: [Анна Куренкова](https://up.htmlacademy.ru/nodejs-api/9/user/165732).
+- Наставник: [Руслан Семак](https://htmlacademy.ru/profile/id1451913).
 
 ---
 
