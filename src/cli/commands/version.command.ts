@@ -13,7 +13,7 @@ export const isPackageJsonType = (content: unknown): content is PackageJson =>
 export class VersionCommand implements Command {
   constructor(private readonly filePath = 'package.json') {}
 
-  name = CommandNames.Version;
+  readonly name = CommandNames.Version;
 
   private readVersion(): string {
     // Read the content of package.json
