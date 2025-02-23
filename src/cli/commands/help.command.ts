@@ -2,7 +2,7 @@ import { Command, CommandNames } from './command.interface.js';
 import chalk from 'chalk';
 
 export class HelpCommand implements Command {
-  name = CommandNames.Help;
+  readonly name = CommandNames.Help;
   public async execute() {
     console.info(chalk.blue(`
         Программа для подготовки данных для REST API сервера.
@@ -16,3 +16,4 @@ export class HelpCommand implements Command {
     `));
   }
 }
+

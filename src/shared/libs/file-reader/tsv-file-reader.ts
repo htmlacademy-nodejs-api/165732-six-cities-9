@@ -1,0 +1,90 @@
+import { FileReader } from './file-reader.interface.js';
+import { Offer } from '../../types/offer-type.js';
+import { User } from '../../types/user-type.js';
+import { createReadStream } from 'node:fs';
+import EventEmitter from 'node:events';
+
+export class TSVFileReader extends EventEmitter implements FileReader {
+  constructor(private readonly filename: string) {
+    super();
+  }
+
+  private parseLineToOffer(line: string): Partial<Offer> {
+    const [
+      title,
+      description,
+      createdDate,
+      name,
+      email,
+      // image,
+      // type,
+      // price,
+      // linksList,
+      // password,
+      // avatarPath,
+      // userType,
+      // isPremium,
+      // isFavorite,
+      // ranking,
+    ] = line.split('\t');
+
+    return {
+      title,
+      description,
+      postDate: new Date(createdDate),
+      // image,
+      // type: type as Type,
+      // linksList: this.parselinksList(linksList),
+      // price: this.parsePrice(price),
+      author: this.parseUser(name, email) as User,
+      // isPremium: this.parseBoolean(isPremium),
+      // isFavorite: this.parseBoolean(isFavorite),
+      // ranking: Number(ranking),
+    };
+  }
+
+  // private parseBoolean(booleanString: string): boolean {
+  //   if (booleanString === 'true') {
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
+  // private parselinksList(linksListString: string): string[] {
+  //   return linksListString.split(';').map((name) => name);
+  // }
+
+  // private parsePrice(priceString: string): number {
+  //   return Number.parseInt(priceString, 10);
+  // }
+
+  private parseUser(name: string, email: string,
+    // avatarPath?: string, password?: string, type?: UserType
+  ): Partial<User> {
+    return { name, email };
+    // avatarPath, password, type
+
+  }
+
+  public async read(): Promise<void> {
+    const readStream = createReadStream(this.filename, { encoding: 'utf-8' });
+
+    let remainingData = ' ';
+    let nextLinePosition = 0;
+    let importedRowCount = 0;
+
+    for await (const chunk of readStream) {
+      remainingData += chunk.toString();
+
+      while ((nextLinePosition = remainingData.indexOf('\n')) >= 0) {
+        const completeRow = remainingData.slice(0, nextLinePosition);
+        remainingData = remainingData.slice(++nextLinePosition);
+        importedRowCount++;
+
+        const parsedOffer = this.parseLineToOffer(completeRow);
+        this.emit('line', parsedOffer);
+      }
+    }
+    this.emit('end', importedRowCount);
+  }
+}
