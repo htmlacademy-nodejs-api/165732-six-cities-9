@@ -27,23 +27,23 @@ export enum Cities {
 }
 
 export type Offer = {
-    title: string;
-    description: string;
-    postDate: Date;
-    city: Cities;
-    image: string;
-    linksList: string[];
-    isPremium: boolean;
-    isFavorite: boolean;
-    ranking: number;
-    type: Type;
-    roomsCount: number;
-    guestsCount: number;
-    price: number;
-    facilities: Facilities;
-    author: User;
-    coordinates: {
-        latitude: string;
-        longitude: string;
+  title: string;
+  description: string;
+  publicationDate: string;
+  city: Cities;
+  preview: string;
+  linksList: string[];
+  isPremium: boolean;
+  isFavorite: boolean;
+  rate: number;
+  accommodationType: Type;
+  roomsCount: number;
+  guestsCount: number;
+  price: number;
+  facilities: Facilities[];
+  user: User;
+  coordinates: {
+       latitude: number;
+       longitude: number;
     }
   }
