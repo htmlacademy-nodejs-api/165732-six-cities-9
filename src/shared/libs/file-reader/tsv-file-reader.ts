@@ -1,6 +1,6 @@
 import { FileReader } from './file-reader.interface.js';
-import { Offer } from '../../types/offer-type.js';
-import { User } from '../../types/user-type.js';
+import { Cities, Facilities, Offer, AccommodationType } from '../../types/offer-type.js';
+import { UserType } from '../../types/user-type.js';
 import { createReadStream } from 'node:fs';
 import EventEmitter from 'node:events';
 
@@ -31,15 +31,28 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     return {
       title,
       description,
-      postDate: new Date(createdDate),
-      // image,
-      // type: type as Type,
-      // linksList: this.parselinksList(linksList),
-      // price: this.parsePrice(price),
-      author: this.parseUser(name, email) as User,
-      // isPremium: this.parseBoolean(isPremium),
-      // isFavorite: this.parseBoolean(isFavorite),
-      // ranking: Number(ranking),
+      publicationDate: new Date(createdDate).toString(),
+      preview: 'wewee',
+      city: Cities.Cologne,
+      linksList: ['link1.com', 'link2.com'],
+      isPremium: true,
+      isFavorite: false,
+      rate: 3.5,
+      accommodationType: AccommodationType.Apartment,
+      roomsCount: 2,
+      guestsCount: 3,
+      price: 100000,
+      facilities: [Facilities.Breakfast, Facilities.Fridge],
+      coordinates: {
+        latitude: 50.938361,
+        longitude: 6.959974
+      },
+      user: {
+        email,
+        avatarPath: 'sdsdsd.jpg',
+        name,
+        type: UserType.Ordinary,
+      },
     };
   }
 
@@ -58,13 +71,13 @@ export class TSVFileReader extends EventEmitter implements FileReader {
   //   return Number.parseInt(priceString, 10);
   // }
 
-  private parseUser(name: string, email: string,
-    // avatarPath?: string, password?: string, type?: UserType
-  ): Partial<User> {
-    return { name, email };
-    // avatarPath, password, type
+  // private parseUser(name: string, email: string,
+  //   // avatarPath?: string, password?: string, type?: UserType
+  // ): Partial<User> {
+  //   return { name, email };
+  //   // avatarPath, password, type
 
-  }
+  // }
 
   public async read(): Promise<void> {
     const readStream = createReadStream(this.filename, { encoding: 'utf-8' });

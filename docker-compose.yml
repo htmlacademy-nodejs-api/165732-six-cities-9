@@ -1,0 +1,20 @@
+services:
+  mongo:
+    image: 'mongo:7.0.5'
+    ports:
+      - ${DB_PORT}:27017
+    container_name: six-cities_mongodb
+    volumes:
+      - my-data:/var/lib/mongodb/data
+
+  mongo-express:
+    image: 'mongo-express:1.0.2'
+    container_name: six-cities_mongo_express
+    ports:
+      - ${DB_UI_PORT}:8081
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: ${DB_USER}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${DB_PASSWORD}
+
+volumes:
+  my-data:
