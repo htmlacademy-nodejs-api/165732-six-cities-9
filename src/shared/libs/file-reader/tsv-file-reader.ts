@@ -1,5 +1,5 @@
 import { FileReader } from './file-reader.interface.js';
-import { Cities, Facilities, Offer, Type } from '../../types/offer-type.js';
+import { Cities, Facilities, Offer, AccommodationType } from '../../types/offer-type.js';
 import { UserType } from '../../types/user-type.js';
 import { createReadStream } from 'node:fs';
 import EventEmitter from 'node:events';
@@ -38,7 +38,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       isPremium: true,
       isFavorite: false,
       rate: 3.5,
-      accommodationType: Type.Apartment,
+      accommodationType: AccommodationType.Apartment,
       roomsCount: 2,
       guestsCount: 3,
       price: 100000,

@@ -1,4 +1,4 @@
-import { Cities, Type, Facilities } from '../../../types/offer-type.js';
+import { Cities, AccommodationType, Facilities, Coordinates } from '../../../types/offer-type.js';
 
 export interface CreateOfferDto {
    title: string;
@@ -10,14 +10,11 @@ export interface CreateOfferDto {
    isPremium: boolean;
    isFavorite: boolean;
    rate: number;
-   accommodationType: Type;
+   accommodationType: AccommodationType;
    roomsCount: number;
    guestsCount: number;
    price: number;
    facilities: Facilities[];
    userId: string;
-   coordinates: {
-        latitude: number;
-        longitude: number;
-    }
+   coordinates: Coordinates;
 }

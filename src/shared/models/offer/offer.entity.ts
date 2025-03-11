@@ -1,5 +1,5 @@
 import { defaultClasses, getModelForClass, prop, modelOptions, Ref } from '@typegoose/typegoose';
-import { Cities, Facilities, Type } from '../../types/offer-type.js';
+import { Cities, Facilities, AccommodationType } from '../../types/offer-type.js';
 import { UserEntity } from '../user/user.entity.js';
 
 // for unique id
@@ -43,13 +43,10 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public isPremium: boolean;
 
   @prop({required: true})
-  public isFavorite: boolean;
-
-  @prop({required: true})
   public rate: number;
 
-  @prop({required: true, enum: Type, type: () => String })
-  public accommodationType: Type;
+  @prop({required: true, enum: AccommodationType, type: () => String })
+  public accommodationType: AccommodationType;
 
   @prop({required: true})
   public roomsCount: number;

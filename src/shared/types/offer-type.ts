@@ -1,6 +1,11 @@
 import { User } from './user-type.js';
 
-export enum Type {
+export interface Coordinates {
+  latitude: number,
+  longitude: number
+}
+
+export enum AccommodationType {
     Apartment = 'apartment',
     House = 'house',
     Room = 'room',
@@ -36,14 +41,11 @@ export type Offer = {
   isPremium: boolean;
   isFavorite: boolean;
   rate: number;
-  accommodationType: Type;
+  accommodationType: AccommodationType;
   roomsCount: number;
   guestsCount: number;
   price: number;
   facilities: Facilities[];
   user: User;
-  coordinates: {
-       latitude: number;
-       longitude: number;
-    }
+  coordinates: Coordinates
   }
