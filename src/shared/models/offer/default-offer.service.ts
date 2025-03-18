@@ -62,7 +62,7 @@ export class DefaultOfferService implements OfferService {
   public async addToFavorites(offerId: string): Promise<void> {
     const offer = await this.offerModel.findById(offerId);
 
-    if (offer?.isFavorite === 'true') {
+    if (offer?.isFavorite === 'false') {
       this.updateById(offerId, {...offer, isFavorite: true});
     }
   }

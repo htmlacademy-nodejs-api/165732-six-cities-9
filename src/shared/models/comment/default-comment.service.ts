@@ -30,4 +30,22 @@ export class DefaultCommentService implements CommentService {
 
     return result.deletedCount;
   }
+
+  public async calculateCommentsByOfferId(offerId: string): Promise<number> {
+    const comments = await this.commentModel.find({offerId});
+
+    return comments.length;
+  }
+
+  public async calculateRateByOfferId(offerId: string): Promise<number> {
+    const comments = await this.commentModel.find({offerId});
+
+    const commentsSum = comments.map((comment) => comment.rate).reduce((a, b) => a + b, 0);
+    const commentsCount = comments.length;
+
+    // один знак после запятой
+    return Math.round(commentsSum / commentsCount * 10) / 10;
+  }
+
+
 }
