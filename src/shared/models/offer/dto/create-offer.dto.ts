@@ -15,6 +15,6 @@ export interface CreateOfferDto {
    guestsCount: number;
    price: number;
    facilities: Facilities[];
-   userId: string;
+   author: string;
    coordinates: Coordinates;
 }

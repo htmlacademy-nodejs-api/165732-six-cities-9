@@ -51,7 +51,8 @@ export class TSVFileReader extends EventEmitter implements FileReader {
         email,
         avatarPath: 'sdsdsd.jpg',
         name,
-        type: UserType.Ordinary,
+        userType: UserType.Ordinary,
+        isLoggedIn: false
       },
     };
   }

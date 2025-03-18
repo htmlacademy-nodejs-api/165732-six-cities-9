@@ -32,7 +32,10 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   private password?: string;
 
   @prop({ required: true, enum: UserType, type: () => String })
-  public type: UserType;
+  public userType: UserType;
+
+  @prop({ required: false, default: false })
+  public isLoggedIn: boolean;
 
   constructor(userData: User) {
     super();
@@ -40,7 +43,8 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
     this.email = userData.email;
     this.avatarPath = userData.avatarPath;
     this.name = userData.name;
-    this.type = userData.type;
+    this.userType = userData.userType;
+    this.isLoggedIn = userData.isLoggedIn;
   }
 
   setPassword(password: string, salt: string) {

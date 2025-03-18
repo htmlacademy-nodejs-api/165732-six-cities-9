@@ -66,11 +66,14 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({required: true})
   public title: string;
 
+  @prop({required: true})
+  public isFavorite: string;
+
   @prop({
     ref: () => UserEntity,
     required: true,
   })
-  public userId: Ref<UserEntity>;
+  public author: Ref<UserEntity>;
 }
 
 export const OfferModel = getModelForClass(OfferEntity);
