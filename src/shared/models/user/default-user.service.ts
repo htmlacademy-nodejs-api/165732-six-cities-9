@@ -6,6 +6,7 @@ import { CreateUserDto } from './dto/create-user.dto.js';
 import { inject, injectable } from 'inversify';
 import { Logger } from '../../libs/logger/logger-interface.js';
 import { Component } from '../../types/component.enum.js';
+import { UpdateUserDto } from './dto/update-user.dto.js';
 
 
 @injectable()
@@ -37,6 +38,24 @@ export class DefaultUserService implements UserService {
     }
 
     return this.create(dto, salt);
+  }
+
+  public async addToFavorite(author: string, offerId: string) {
+    const user = await this.userModel.findById(author);
+
+    return this.userModel.findByIdAndUpdate(author, {...user, favoriteOffersIds: [...(user?.favoriteOffersIds ?? []), offerId]});
+  }
+
+  public async removeFromFavorite(author: string, offerId: string) {
+    const user = await this.userModel.findById(author);
+
+    return this.userModel.findByIdAndUpdate(author, {...user, favoriteOffersIds: user?.favoriteOffersIds?.filter((id) => id !== offerId)});
+  }
+
+  public async updateById(author: string, dto: UpdateUserDto): Promise<DocumentType<UserEntity> | null> {
+    return this.userModel
+      .findByIdAndUpdate(author, dto, { new: true })
+      .exec();
   }
 }
 

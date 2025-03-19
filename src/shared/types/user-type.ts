@@ -7,5 +7,6 @@ export type User = {
     email: string;
     avatarPath: string;
     name: string;
-    type: UserType;
+    userType: UserType;
+    favoriteOffersIds?: string[];
   }

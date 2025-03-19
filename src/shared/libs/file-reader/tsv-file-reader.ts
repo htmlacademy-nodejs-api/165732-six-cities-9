@@ -36,7 +36,6 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       city: Cities.Cologne,
       linksList: ['link1.com', 'link2.com'],
       isPremium: true,
-      isFavorite: false,
       rate: 3.5,
       accommodationType: AccommodationType.Apartment,
       roomsCount: 2,
@@ -51,7 +50,8 @@ export class TSVFileReader extends EventEmitter implements FileReader {
         email,
         avatarPath: 'sdsdsd.jpg',
         name,
-        type: UserType.Ordinary,
+        userType: UserType.Ordinary,
+        favoriteOffersIds: [],
       },
     };
   }

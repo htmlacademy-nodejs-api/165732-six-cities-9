@@ -43,7 +43,7 @@ export class ImportCommand implements Command {
 
     if (createdUser) {
       await this.offerService.create({
-        userId: createdUser.id,
+        author: createdUser.id,
         ...rest,
 
       });
