@@ -8,5 +8,5 @@ export type User = {
     avatarPath: string;
     name: string;
     userType: UserType;
-    isLoggedIn: boolean;
+    favoriteOffersIds?: string[];
   }

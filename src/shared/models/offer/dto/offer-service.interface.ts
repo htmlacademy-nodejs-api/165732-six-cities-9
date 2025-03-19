@@ -4,6 +4,7 @@ import { OfferEntity } from '../offer.entity.js';
 import { CreateOfferDto } from './create-offer.dto.js';
 import { UpdateOfferDto } from './update-offer.dto.js';
 import { Nullable } from '../../../utils/common.js';
+import { CreateCommentDto } from '../../comment/dto/create-comment.dto.js';
 
 export type DocumentTypeOfferEntity = DocumentType<OfferEntity>
 export type DocumentTypeOfferEntityNullable = Nullable<DocumentTypeOfferEntity>
@@ -16,7 +17,5 @@ export interface OfferService {
   deleteById(offerId: string): Promise<DocumentTypeOfferEntityNullable>;
   find(): Promise<DocumentTypeOfferEntity[]>;
   findIsPremiumByCity(city: string): Promise<OfferEntitiesNullable>;
-  findIsFavorite(): Promise<OfferEntitiesNullable>;
-  deleteFromFavorites(offerId: string): Promise<void>;
-  addToFavorites(offerId: string): Promise<void>;
+  addReview(commentDto: CreateCommentDto): Promise<DocumentTypeOfferEntityNullable>;
 }

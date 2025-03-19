@@ -6,5 +6,4 @@ export interface CreateUserDto {
   avatarPath: string;
   password: string;
   userType: UserType;
-  isLoggedIn: boolean;
 }

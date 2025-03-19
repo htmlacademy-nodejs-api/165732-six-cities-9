@@ -34,8 +34,8 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   @prop({ required: true, enum: UserType, type: () => String })
   public userType: UserType;
 
-  @prop({ required: false, default: false })
-  public isLoggedIn: boolean;
+  @prop({ required: false, default: [] })
+  public favoriteOffersIds: string[];
 
   constructor(userData: User) {
     super();
@@ -44,7 +44,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
     this.avatarPath = userData.avatarPath;
     this.name = userData.name;
     this.userType = userData.userType;
-    this.isLoggedIn = userData.isLoggedIn;
+    this.favoriteOffersIds = userData.favoriteOffersIds ?? [];
   }
 
   setPassword(password: string, salt: string) {

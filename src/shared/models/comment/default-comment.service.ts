@@ -5,6 +5,8 @@ import { CommentService } from './dto/comment-service.interface.js';
 import { Component } from '../../types/component.enum.js';
 import { CommentEntity } from './comment.entity.js';
 import { CreateCommentDto } from '../comment/dto/create-comment.dto.js';
+import { DEFAULT_COMMENTS_COUNT, SortType } from '../../constants.js';
+
 
 @injectable()
 export class DefaultCommentService implements CommentService {
@@ -17,10 +19,9 @@ export class DefaultCommentService implements CommentService {
     return comment.populate('author');
   }
 
-  public async findByOfferId(offerId: string): Promise<DocumentType<CommentEntity>[]> {
-    return this.commentModel
-      .find({offerId})
-      .populate('author');
+  public async findByOfferId(offerId: string, limit = DEFAULT_COMMENTS_COUNT): Promise<DocumentType<CommentEntity>[] | null> {
+    return this.commentModel.find({ offerId }).sort({ commentCount: SortType.Down })
+      .limit(limit);
   }
 
   public async deleteByOfferId(offerId: string): Promise<number> {
@@ -30,22 +31,5 @@ export class DefaultCommentService implements CommentService {
 
     return result.deletedCount;
   }
-
-  public async calculateCommentsByOfferId(offerId: string): Promise<number> {
-    const comments = await this.commentModel.find({offerId});
-
-    return comments.length;
-  }
-
-  public async calculateRateByOfferId(offerId: string): Promise<number> {
-    const comments = await this.commentModel.find({offerId});
-
-    const commentsSum = comments.map((comment) => comment.rate).reduce((a, b) => a + b, 0);
-    const commentsCount = comments.length;
-
-    // один знак после запятой
-    return Math.round(commentsSum / commentsCount * 10) / 10;
-  }
-
 
 }

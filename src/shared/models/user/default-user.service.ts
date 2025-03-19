@@ -45,30 +45,5 @@ export class DefaultUserService implements UserService {
       .findByIdAndUpdate(author, dto, { new: true })
       .exec();
   }
-
-  public async findStatusById(author: string): Promise<boolean | undefined> {
-    const user = await this.userModel.findById(author);
-    return user?.isLoggedIn;
-  }
-
-  public async findStatusByEmail(email: string): Promise<boolean | undefined> {
-    const user = await this.findByEmail(email);
-    return user?.isLoggedIn;
-  }
-
-  // вход в закрытую часть приложения
-  public async login(author: string): Promise<void> {
-    const user = await this.userModel.findById(author);
-
-    this.updateById(author, {...user, isLoggedIn: true});
-
-  }
-
-  public async logout(author: string): Promise<void> {
-    const user = await this.userModel.findById(author);
-
-    this.updateById(author, {...user, isLoggedIn: false});
-
-  }
 }
 

@@ -9,8 +9,4 @@ export interface UserService {
   findByEmail(email: string): Promise<DocumentType<UserEntity> | null>;
   findOrCreate(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>>;
   updateById(author: string, dto: UpdateUserDto): Promise<DocumentType<UserEntity> | null>;
-  findStatusById(author: string): Promise<boolean | undefined>
-  findStatusByEmail(email: string): Promise<boolean | undefined>
-  login(author: string): Promise<void>;
-  logout(author: string): Promise<void>;
 }

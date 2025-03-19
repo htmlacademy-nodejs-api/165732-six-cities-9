@@ -66,9 +66,6 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({required: true})
   public title: string;
 
-  @prop({required: true})
-  public isFavorite: string;
-
   @prop({
     ref: () => UserEntity,
     required: true,
