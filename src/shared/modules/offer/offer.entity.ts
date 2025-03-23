@@ -27,7 +27,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ required: true })
   public description: string;
 
-  @prop({ required: true })
+  @prop({ required: false })
   public publicationDate: string;
 
   @prop({ required: true, enum: Cities, type: () => String })
@@ -42,7 +42,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({required: true})
   public isPremium: boolean;
 
-  @prop({required: true})
+  @prop({required: false})
   public rate: number;
 
   @prop({required: true, enum: AccommodationType, type: () => String })
@@ -60,7 +60,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({required: true, default: [], enum: Facilities, type: () => String})
   public facilities: Facilities[];
 
-  @prop({required: true, type: () => Coordinates})
+  @prop({required: false, type: () => Coordinates})
   public coordinates: Coordinates;
 
   @prop({required: true})
@@ -68,7 +68,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
 
   @prop({
     ref: () => UserEntity,
-    required: true,
+    required: false,
   })
   public author: Ref<UserEntity>;
 }
