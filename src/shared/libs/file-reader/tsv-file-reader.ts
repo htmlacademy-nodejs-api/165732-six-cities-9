@@ -36,7 +36,6 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       city: Cities.Cologne,
       linksList: ['link1.com', 'link2.com'],
       isPremium: true,
-      rate: 3.5,
       accommodationType: AccommodationType.Apartment,
       roomsCount: 2,
       guestsCount: 3,

@@ -18,12 +18,14 @@ export class OfferController extends BaseController {
     super(logger);
     this.logger.info('Register routes for OfferController…');
 
-    this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create });
-    this.addRoute({ path: '/', method: HttpMethod.Get, handler: this.index });
-    this.addRoute({ path: '/:id', method: HttpMethod.Get, handler: this.byId });
-    this.addRoute({ path: '/:id', method: HttpMethod.Put, handler: this.edit });
-    this.addRoute({ path: '/:id', method: HttpMethod.Delete, handler: this.delete });
-    this.addRoute({ path: '/:city/premium', method: HttpMethod.Delete, handler: this.premiumForCity });
+    this.addRoutes([
+      { path: '/', method: HttpMethod.Post, handler: this.create },
+      { path: '/', method: HttpMethod.Get, handler: this.index },
+      { path: '/:id', method: HttpMethod.Get, handler: this.findbyId },
+      { path: '/:id', method: HttpMethod.Put, handler: this.edit },
+      { path: '/:id', method: HttpMethod.Delete, handler: this.delete },
+      { path: '/:city/premium', method: HttpMethod.Delete, handler: this.premiumForCity }
+    ]);
   }
 
   public async create(
@@ -39,7 +41,7 @@ export class OfferController extends BaseController {
     this.ok(res, responseData);
   }
 
-  public async byId(req: Request, res: Response): Promise<void> {
+  public async findbyId(req: Request, res: Response): Promise<void> {
     const result = await this.offerService.findById(req.params.id);
     const responseData = fillDTO(OfferRdo, result);
     this.ok(res, responseData);

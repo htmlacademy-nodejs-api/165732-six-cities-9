@@ -30,6 +30,11 @@ export class DefaultUserService implements UserService {
     return this.userModel.findOne({email});
   }
 
+  public async findFavoritesByUser(userId: string): Promise<DocumentType<UserEntity> | null> {
+    const result = this.userModel.findOne({id: userId});
+    return result[0].favoriteOffersIds ?? [];
+  }
+
   public async findOrCreate(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>> {
     const existedUser = await this.findByEmail(dto.email);
 
@@ -38,18 +43,6 @@ export class DefaultUserService implements UserService {
     }
 
     return this.create(dto, salt);
-  }
-
-  public async addToFavorite(author: string, offerId: string) {
-    const user = await this.userModel.findById(author);
-
-    return this.userModel.findByIdAndUpdate(author, {...user, favoriteOffersIds: [...(user?.favoriteOffersIds ?? []), offerId]});
-  }
-
-  public async removeFromFavorite(author: string, offerId: string) {
-    const user = await this.userModel.findById(author);
-
-    return this.userModel.findByIdAndUpdate(author, {...user, favoriteOffersIds: user?.favoriteOffersIds?.filter((id) => id !== offerId)});
   }
 
   public async updateById(author: string, dto: UpdateUserDto): Promise<DocumentType<UserEntity> | null> {

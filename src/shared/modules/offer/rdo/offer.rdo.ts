@@ -21,19 +21,19 @@ export class OfferRdo {
   public linksList: string[];
 
   @Expose()
-  public isPremium: string;
+  public isPremium: boolean;
 
   @Expose()
   public accommodationType: AccommodationType;
 
   @Expose()
-  public roomsCount: string;
+  public roomsCount: number;
 
   @Expose()
-  public guestsCount: string;
+  public guestsCount: number;
 
   @Expose()
-  public price: string;
+  public price: number;
 
   @Expose()
   public facilities: Facilities[];

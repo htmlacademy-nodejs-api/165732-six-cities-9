@@ -8,7 +8,7 @@ export class CommentRdo {
   public offerId: string;
 
   @Expose()
-  public rate: string;
+  public rate: number;
 
   @Expose()
   public author: string;

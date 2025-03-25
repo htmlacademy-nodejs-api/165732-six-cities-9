@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 
 import { BaseController } from '../../../rest/controller/base-controller.abstract.js';
 import { HttpMethod } from '../../../rest/types/http-method.enum.js';
@@ -22,7 +22,11 @@ export class UserController extends BaseController {
     super(logger);
     this.logger.info('Register routes for UserController…');
 
-    this.addRoute({ path: '/register', method: HttpMethod.Post, handler: this.create });
+    this.addRoutes([
+      { path: '/register', method: HttpMethod.Post, handler: this.create },
+      { path: '/:id', method: HttpMethod.Post, handler: this.updateById },
+      { path: '/:id/favorite', method: HttpMethod.Get, handler: this.findFavoritesByUser },
+    ]);
   }
 
 
@@ -41,5 +45,17 @@ export class UserController extends BaseController {
     const result = await this.userService.create(body, this.configService.get('SALT'));
     this.created(res, fillDTO(UserRdo, result));
 
+  }
+
+  public async updateById(req: Request, res: Response) {
+    const result = await this.userService.updateById(req.params.id, req.body);
+    const responseData = fillDTO(UserRdo, result);
+    this.ok(res, responseData);
+  }
+
+  public async findFavoritesByUser(req: Request, res: Response) {
+    const result = await this.userService.findFavoritesByUser(req.params.id);
+    const responseData = fillDTO(UserRdo, result);
+    this.ok(res, fillDTO(UserRdo, responseData.favoriteOffersIds));
   }
 }

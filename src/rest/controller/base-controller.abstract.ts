@@ -22,9 +22,12 @@ export abstract class BaseController implements Controller {
     return this._router;
   }
 
-  public addRoute(route: Route) {
-    this._router[route.method](route.path, route.handler.bind(this));
-    this.logger.info(`Route registered: ${route.method.toUpperCase()} ${route.path}`);
+  public addRoutes(routes: Route[]) {
+    routes.forEach((route) => {
+      this._router[route.method](route.path, route.handler.bind(this));
+      this.logger.info(`Route registered: ${route.method.toUpperCase()} ${route.path}`);
+    });
+
   }
 
   public send<T>(res: Response, statusCode: number, data: T): void {

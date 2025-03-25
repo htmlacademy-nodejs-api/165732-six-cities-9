@@ -106,24 +106,23 @@ paths:
         "409":
           description: Пользователь не авторизирован.
 
-  /user/favorite:
+  /user/{userId}:
     post:
       tags:
         - users
-      summary: Добавление предложения по аренде в избранное для пользователя
+      summary: Редактирование пользователя
       description: Добавление предложения по аренде в избранное и возвращает обновленный список предложений о аренде добавленных в избранное
 
-      requestBody:
-        description: Информация для создания нового предложения по аренде.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/createFavorite'
-        required: true
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
 
       responses:
         "201":
-          description: Предложении по аренде добавлено в избранное.
+          description: Пользователь отредактирован.
           content:
             application/json:
               schema:
@@ -138,6 +137,13 @@ paths:
         - users
       summary: Получения списка предложений, добавленных в избранное
       description: Возвращает список предложений по аренде добавленных в избранное
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
 
       responses:
         "201":

@@ -42,9 +42,6 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({required: true})
   public isPremium: boolean;
 
-  @prop({required: false})
-  public rate: number;
-
   @prop({required: true, enum: AccommodationType, type: () => String })
   public accommodationType: AccommodationType;
 
