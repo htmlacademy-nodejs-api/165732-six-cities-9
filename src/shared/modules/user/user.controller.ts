@@ -11,6 +11,9 @@ import { Config } from '../../libs/config/config.interface.js';
 import { RestSchema } from '../../libs/config/rest.schema.js';
 import { UserRdo } from './rdo/user.rdo.js';
 import { fillDTO } from '../../utils/common.js';
+import { HttpError } from '../../libs/rest/errors/http-error.js';
+import { StatusCodes } from 'http-status-codes';
+import { LoginUserRequest } from './login-user-request.type.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -26,6 +29,7 @@ export class UserController extends BaseController {
       { path: '/register', method: HttpMethod.Post, handler: this.create },
       { path: '/:id', method: HttpMethod.Post, handler: this.updateById },
       { path: '/:id/favorite', method: HttpMethod.Get, handler: this.findFavoritesByUser },
+      { path: '/login', method: HttpMethod.Post, handler: this.login }
     ]);
   }
 
@@ -37,9 +41,10 @@ export class UserController extends BaseController {
     const existsUser = await this.userService.findByEmail(body.email);
 
     if (existsUser) {
-      throw new Error(
+      throw new HttpError(
+        StatusCodes.CONFLICT,
         `User with email «${body.email}» exists.`,
-      );
+        'UserController');
     }
 
     const result = await this.userService.create(body, this.configService.get('SALT'));
@@ -57,5 +62,26 @@ export class UserController extends BaseController {
     const result = await this.userService.findFavoritesByUser(req.params.id);
     const responseData = fillDTO(UserRdo, result);
     this.ok(res, fillDTO(UserRdo, responseData.favoriteOffersIds));
+  }
+
+  public async login(
+    { body }: LoginUserRequest,
+    _res: Response,
+  ): Promise<void> {
+    const existsUser = await this.userService.findByEmail(body.email);
+
+    if (! existsUser) {
+      throw new HttpError(
+        StatusCodes.UNAUTHORIZED,
+        `User with email ${body.email} not found.`,
+        'UserController',
+      );
+    }
+
+    throw new HttpError(
+      StatusCodes.NOT_IMPLEMENTED,
+      'Not implemented',
+      'UserController',
+    );
   }
 }

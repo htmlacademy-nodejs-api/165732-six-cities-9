@@ -146,7 +146,7 @@ paths:
             type: string
 
       responses:
-        "201":
+        "200":
           description: Список предложений по аренде, добавленных в избранное
 
           content:
@@ -200,8 +200,8 @@ paths:
                 minimum: 1
 
       responses:
-        "201":
-          description: Список предложение по арендею
+        "200":
+          description: Список предложений по аренде
 
           content:
             application/json:
@@ -228,7 +228,7 @@ paths:
             type: string
 
       responses:
-        "201":
+        "200":
           description: Детальная информация о предложении по аренде.
           content:
             application/json:
@@ -304,7 +304,7 @@ paths:
             type: string
 
       responses:
-        "201":
+        "200":
           description: Список преминальных предложений по аренде для выбраноого города
 
           content:
@@ -333,7 +333,7 @@ paths:
               $ref: '#/components/schemas/getComment'
 
       responses:
-        "201":
+        "200":
           description: Список комментариев к предложению по аренде
 
           content:

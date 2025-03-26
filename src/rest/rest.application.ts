@@ -7,6 +7,7 @@ import { DatabaseClient } from '../shared/libs/database-client/database-client.i
 import { getMongoURI } from '../shared/utils/database.js';
 import express, { Express } from 'express';
 import { Controller } from './controller/controller.interface.js';
+import { ExceptionFilter } from '../shared/libs/rest/exception-filter/exception-filter.interface.js';
 
 @injectable()
 export class RestApplication {
@@ -19,29 +20,36 @@ export class RestApplication {
     @inject(Component.UserController) private readonly userController: Controller,
     @inject(Component.OfferController) private readonly offerController: Controller,
     @inject(Component.CommentController) private readonly commentController: Controller,
+    @inject(Component.ExceptionFilter) private readonly appExceptionFilter: ExceptionFilter,
   ) {
     this.server = express();
   }
 
-  private async _initMiddleware() {
+  private async initMiddlewares() {
     this.logger.info('Init app-level middleware');
     this.server.use(express.json());
     this.logger.info('App-level middleware initialization completed');
   }
 
+  private async initExceptionFilters() {
+    this.logger.info('Init exception filters');
+    this.server.use(this.appExceptionFilter.catch.bind(this.appExceptionFilter));
+    this.logger.info('Exception filters initialization compleated');
+  }
 
-  private async _initControllers() {
+
+  private async initControllers() {
     this.server.use('/users', this.userController.router);
     this.server.use('/offers', this.offerController.router);
     this.server.use('/comments', this.commentController.router);
   }
 
-  private async _initServer() {
+  private async initServer() {
     this.logger.info('Try to init server…');
     const port = this.config.get('PORT');
     this.server.listen(port);
     this.logger.info(
-      `🚀 Server started on http://localhost:${this.config.get('PORT')}`
+      `🚀 Server started on http://localhost:${port}`
     );
   }
 
@@ -56,13 +64,13 @@ export class RestApplication {
     this.logger.info('Init database completed');
   }
 
-
   public async init() {
     this.logger.info('Application initialization');
     await this.initDb();
-    await this._initMiddleware();
-    await this._initControllers();
-    await this._initServer();
+    await this.initMiddlewares();
+    await this.initControllers();
+    await this.initExceptionFilters();
+    await this.initServer();
   }
 }
 
