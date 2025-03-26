@@ -106,11 +106,65 @@ paths:
         "409":
           description: Пользователь не авторизирован.
 
+  /user/{userId}:
+    post:
+      tags:
+        - users
+      summary: Редактирование пользователя
+      description: Добавление предложения по аренде в избранное и возвращает обновленный список предложений о аренде добавленных в избранное
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "201":
+          description: Пользователь отредактирован.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successResponse'
+
+        "409":
+          description:  что то пошло не так.
+
+  /users/{userId}/favorite:
+    get:
+      tags:
+        - users
+      summary: Получения списка предложений, добавленных в избранное
+      description: Возвращает список предложений по аренде добавленных в избранное
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: Список предложений по аренде, добавленных в избранное
+
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offer'
+
+        "409":
+          description: Что то пошло не так.
+
+
   /offers:
     post:
       tags:
         - offers
-      summary: Создание новое предложения по аренде
+      summary: Создание нового предложения по аренде
       description: Создает новое предложения по аренде и возвращает детальную информацию созданного предложения по аренде
 
       requestBody:
@@ -146,8 +200,8 @@ paths:
                 minimum: 1
 
       responses:
-        "201":
-          description: Список предложение по арендею
+        "200":
+          description: Список предложений по аренде
 
           content:
             application/json:
@@ -174,7 +228,7 @@ paths:
             type: string
 
       responses:
-        "201":
+        "200":
           description: Детальная информация о предложении по аренде.
           content:
             application/json:
@@ -236,77 +290,6 @@ paths:
         "409":
           description: id не существует.
 
-  /offers/favorite:
-    get:
-      tags:
-        - offers
-      summary: Получения списка предложений, добавленных в избранное
-      description: Возвращает список предложений по аренде добавленных в избранное
-
-      responses:
-        "201":
-          description: Список предложение по аренде, добавленных в избранное
-
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/offer'
-
-        "409":
-          description: Что то пошло не так.
-
-  /offers/{offerId}/favorite:
-    post:
-      tags:
-        - offers
-      summary: Добавление предложения по аренде в избранное
-      description: Добавление предложения по аренде в избранное и возвращает обновленный список предложений о аренде добавленных в избранное
-
-      parameters:
-        - name: offerId
-          in: path
-          required: true
-          schema:
-            type: string
-
-      responses:
-        "201":
-          description: Предложении по аренде добавлено в избранное.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/successResponse'
-
-        "409":
-          description:  что то пошло не так.
-
-    delete:
-      tags:
-        - offers
-      summary: Удаление предложения по аренде из избранного
-      description: Удаляет предложения по аренде из избранного и обновленный список предложений о аренде добавленных в избранное
-
-      parameters:
-        - name: offerId
-          in: path
-          required: true
-          schema:
-            type: string
-
-      responses:
-        "201":
-          description: Предложение по аренде удалено из избранного.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/successResponse'
-
-        "409":
-          description: что то пошло не так.
-
-
   /offers/{city}/premium:
     get:
       tags:
@@ -321,7 +304,7 @@ paths:
             type: string
 
       responses:
-        "201":
+        "200":
           description: Список преминальных предложений по аренде для выбраноого города
 
           content:
@@ -335,21 +318,22 @@ paths:
           description:  Город не существует.
 
 
-  /{offerId}/comments:
+  /comments:
     get:
       tags:
         - comments
       summary: Получение списка комментариев для предложения по аренде
       description: Возвращает список комментариев для предложения по аренде
-      parameters:
-        - name: offerId
-          in: path
-          required: true
-          schema:
-            type: string
+      requestBody:
+        description: Offer id.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/getComment'
 
       responses:
-        "201":
+        "200":
           description: Список комментариев к предложению по аренде
 
           content:
@@ -361,18 +345,23 @@ paths:
         "409":
           description: Пользователь с таким email уже существует.
 
+    delete:
+      tags:
+       - comments
+      summary: Удаление комментария для предложения
+      description: Удаляет комментарий
+      requestBody:
+        description: Offer id.
+        required: true
+        content:
+          application/json:
+            schema:
+             $ref: '#/components/schemas/getComment'
     post:
       tags:
         - comments
       summary: Добавление комментария для предложения
-      description: Добавляет новый комментарий для предложения по аренде.
-      parameters:
-        - name: offerId
-          in: path
-          required: true
-          schema:
-            type: string
-
+      description: Добавляет новый комментарий для предложения по аренде
       requestBody:
         description: Информация для создания нового комментария для предложения по аренде.
         content:
@@ -525,6 +514,11 @@ components:
               type: number
               example: 20
 
+    getComment:
+      type: object
+      properties:
+        offerId:
+          type: string
     createComment:
       type: object
       properties:
@@ -538,7 +532,11 @@ components:
 
         authorId:
           type: string
-          example: 'fddfdf'
+          example: '565bgt7nyg'
+
+        offerId:
+          type: string
+          example: '565bgt7ny4deg'
 
     comment:
       type: object
@@ -560,6 +558,18 @@ components:
           type: string
           format: date-time
           example: "2024-02-28T15:30:00Z"
+
+        offerId:
+          type: string
+          example: '565bgt7ny4deg'
+
+    createFavorite:
+      type: object
+
+      properties:
+          offerId:
+            type: string
+            example: 'dgwts527bhds7jsn'
 
     offer:
       type: object
@@ -658,3 +668,4 @@ components:
             isPro:
               type: boolean
               example: true
+

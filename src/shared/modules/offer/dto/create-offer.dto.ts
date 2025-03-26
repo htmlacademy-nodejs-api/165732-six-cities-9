@@ -8,7 +8,6 @@ export interface CreateOfferDto {
    preview: string;
    linksList: string[];
    isPremium: boolean;
-   rate: number;
    accommodationType: AccommodationType;
    roomsCount: number;
    guestsCount: number;

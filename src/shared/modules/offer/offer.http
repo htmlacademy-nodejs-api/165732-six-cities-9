@@ -1,0 +1,26 @@
+# Объявление
+## Создать новое объявление
+
+POST http://localhost:4000/offers HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "новый дом 1",
+  "description":"лучший дом 1",
+  "avatarPath": "torrance.png",
+  "name": "Jack Torrance",
+  "password": "shining",
+  "userType": "ordinary",
+  "city": "Cologne",
+  "preview": "preview.png",
+  "linksList": "['test1.png', 'test2.png']",
+  "isPremium": "false",
+  "accommodationType": "house",
+  "roomsCount": "4",
+  "guestsCount": "6",
+  "price": "100000",
+  "facilities": "Breakfast",
+  "coordinates": "{'latitude': '23', 'longitude': '52'}"
+}
+
+###
