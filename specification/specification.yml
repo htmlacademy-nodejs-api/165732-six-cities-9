@@ -114,7 +114,7 @@ paths:
       description: Добавление предложения по аренде в избранное и возвращает обновленный список предложений о аренде добавленных в избранное
 
       parameters:
-        - name: id
+        - name: userId
           in: path
           required: true
           schema:
@@ -139,7 +139,7 @@ paths:
       description: Возвращает список предложений по аренде добавленных в избранное
 
       parameters:
-        - name: id
+        - name: userId
           in: path
           required: true
           schema:

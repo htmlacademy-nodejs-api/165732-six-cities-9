@@ -8,6 +8,8 @@ import { CreateCommentRequest } from './create-comment-request.type.js';
 import { Response, Request } from 'express';
 import { fillDTO } from '../../utils/common.js';
 import { CommentRdo } from './rdo/comment.rdo.js';
+import { ValidateDtoMiddleware } from '../../../rest/middleware/validate-dto.middleware.js';
+import { CreateCommentDto } from './dto/create-comment.dto.js';
 
 @injectable()
 export class CommentController extends BaseController {
@@ -18,9 +20,8 @@ export class CommentController extends BaseController {
     super(logger);
     this.logger.info('Register routes for CommentController...');
     this.addRoutes([
-      { path: '/', method: HttpMethod.Post, handler: this.create },
+      { path: '/', method: HttpMethod.Post, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateCommentDto)] },
       { path: '/', method: HttpMethod.Get, handler: this.index },
-      { path: '/', method: HttpMethod.Delete, handler: this.deleteById }
     ]);
   }
 
@@ -33,11 +34,6 @@ export class CommentController extends BaseController {
 
   public async index(req: Request, res: Response) {
     const result = await this.commentService.findByOfferId(req.body.offerId);
-    this.ok(res, fillDTO(CommentRdo, result));
-  }
-
-  public async deleteById(req: Request, res: Response) {
-    const result = await this.commentService.deleteByOfferId(req.body.offerId);
     this.ok(res, fillDTO(CommentRdo, result));
   }
 }
