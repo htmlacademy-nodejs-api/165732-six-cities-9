@@ -5,6 +5,7 @@ import { Response, Router } from 'express';
 import { Controller } from './controller.interface.js';
 import { Logger } from '../../shared/libs/logger/logger-interface.js';
 import { Route } from '../types/route.interface.js';
+import asyncHandler from 'express-async-handler';
 
 
 @injectable()
@@ -24,7 +25,13 @@ export abstract class BaseController implements Controller {
 
   public addRoutes(routes: Route[]) {
     routes.forEach((route) => {
-      this._router[route.method](route.path, route.handler.bind(this));
+      const wrapperAsyncHandler = asyncHandler(route.handler.bind(this));
+      const middlewareHandlers = route.middlewares?.map(
+        (item) => asyncHandler(item.execute.bind(item))
+      );
+      const allHandlers = middlewareHandlers ? [...middlewareHandlers, wrapperAsyncHandler] : wrapperAsyncHandler;
+
+      this._router[route.method](route.path, allHandlers);
       this.logger.info(`Route registered: ${route.method.toUpperCase()} ${route.path}`);
     });
 

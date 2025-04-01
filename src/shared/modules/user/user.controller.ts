@@ -14,6 +14,10 @@ import { fillDTO } from '../../utils/common.js';
 import { HttpError } from '../../libs/rest/errors/http-error.js';
 import { StatusCodes } from 'http-status-codes';
 import { LoginUserRequest } from './login-user-request.type.js';
+import { ValidateObjectIdMiddleware } from '../../../rest/middleware/validate-objectId.middleware.js';
+import { ValidateDtoMiddleware } from '../../../rest/middleware/validate-dto.middleware.js';
+import { CreateUserDto } from './dto/create-user.dto.js';
+import { LoginUserDto } from './dto/login-user.dto.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -26,10 +30,10 @@ export class UserController extends BaseController {
     this.logger.info('Register routes for UserController…');
 
     this.addRoutes([
-      { path: '/register', method: HttpMethod.Post, handler: this.create },
-      { path: '/:id', method: HttpMethod.Post, handler: this.updateById },
-      { path: '/:id/favorite', method: HttpMethod.Get, handler: this.findFavoritesByUser },
-      { path: '/login', method: HttpMethod.Post, handler: this.login }
+      { path: '/register', method: HttpMethod.Post, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateUserDto)] },
+      { path: '/:userId', method: HttpMethod.Post, handler: this.edit, middlewares: [new ValidateObjectIdMiddleware('userId')]},
+      { path: '/:userId/favorite', method: HttpMethod.Get, handler: this.findFavoritesByUser, middlewares: [new ValidateObjectIdMiddleware('userId')] },
+      { path: '/login', method: HttpMethod.Post, handler: this.login, middlewares: [new ValidateDtoMiddleware(LoginUserDto)] }
     ]);
   }
 
@@ -52,14 +56,14 @@ export class UserController extends BaseController {
 
   }
 
-  public async updateById(req: Request, res: Response) {
-    const result = await this.userService.updateById(req.params.id, req.body);
+  public async edit(req: Request, res: Response) {
+    const result = await this.userService.updateById(req.params.userId, req.body);
     const responseData = fillDTO(UserRdo, result);
     this.ok(res, responseData);
   }
 
   public async findFavoritesByUser(req: Request, res: Response) {
-    const result = await this.userService.findFavoritesByUser(req.params.id);
+    const result = await this.userService.findFavoritesByUser(req.params.userId);
     const responseData = fillDTO(UserRdo, result);
     this.ok(res, fillDTO(UserRdo, responseData.favoriteOffersIds));
   }
@@ -77,11 +81,5 @@ export class UserController extends BaseController {
         'UserController',
       );
     }
-
-    throw new HttpError(
-      StatusCodes.NOT_IMPLEMENTED,
-      'Not implemented',
-      'UserController',
-    );
   }
 }
