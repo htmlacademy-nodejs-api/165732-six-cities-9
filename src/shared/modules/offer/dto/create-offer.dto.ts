@@ -1,22 +1,23 @@
 import { Cities, AccommodationType, Facilities, Coordinates } from '../../../types/offer-type.js';
 import { CreateOfferValidationMessage } from './create-offer.messages.js';
 import {
-  IsArray, IsDateString, IsEnum, IsInt, Max, MaxLength, Min, MinLength,
-  ArrayMinSize, ArrayMaxSize, IsString, IsNotEmpty, IsBoolean, IsNumber,
+  IsDateString, IsEnum, IsInt, Max, MaxLength, Min, MinLength,
+  ArrayMinSize, ArrayMaxSize, IsString, IsNotEmpty, IsBoolean,
   IsMongoId, ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CoordinatesDto } from './coordinates.dto.js';
+import { MAX_DESCRIPTION_LENGTH, MAX_GUESTS_AND_ROOMS_COUNT, MAX_LINKS_LENGTH, MAX_OFFER_TITLE_LENGTH, MAX_PRICE, MIN_DESCRIPTION_LENGTH, MIN_FACILITIES_LENGTH, MIN_GUESTS_AND_ROOMS_COUNT, MIN_LINKS_LENGTH, MIN_OFFER_TITLE_LENGTH, MIN_PRICE } from '../../../constants.js';
 
 export class CreateOfferDto {
   @IsString()
-  @MinLength(10, { message: CreateOfferValidationMessage.title.minLength })
-  @MaxLength(100, { message: CreateOfferValidationMessage.title.maxLength })
+  @MinLength(MIN_OFFER_TITLE_LENGTH, { message: CreateOfferValidationMessage.title.minLength })
+  @MaxLength(MAX_OFFER_TITLE_LENGTH, { message: CreateOfferValidationMessage.title.maxLength })
     title: string;
 
   @IsString()
-  @MinLength(20, { message: CreateOfferValidationMessage.description.minLength })
-  @MaxLength(1024, { message: CreateOfferValidationMessage.description.maxLength })
+  @MinLength(MIN_DESCRIPTION_LENGTH, { message: CreateOfferValidationMessage.description.minLength })
+  @MaxLength(MAX_DESCRIPTION_LENGTH, { message: CreateOfferValidationMessage.description.maxLength })
     description: string;
 
   @IsDateString({}, { message: CreateOfferValidationMessage.publicationDate.invalidFormat })
@@ -24,16 +25,13 @@ export class CreateOfferDto {
     publicationDate: Date;
 
   @IsEnum(Cities, { message: CreateOfferValidationMessage.city.invalid })
-  @IsNotEmpty()
     city: Cities;
 
   @IsString()
-  @IsNotEmpty()
     preview: string;
 
-  @IsArray({ message: CreateOfferValidationMessage.linksList.invalidFormat })
-  @ArrayMinSize(6)
-  @ArrayMaxSize(6)
+  @ArrayMinSize(MIN_LINKS_LENGTH)
+  @ArrayMaxSize(MAX_LINKS_LENGTH)
   @IsString({ each: true })
     linksList: string[];
 
@@ -43,28 +41,22 @@ export class CreateOfferDto {
   @IsEnum(AccommodationType, { message: CreateOfferValidationMessage.city.invalid })
     accommodationType: AccommodationType;
 
-  @IsNumber()
   @IsInt()
-  @IsNotEmpty()
-  @Min(1)
-  @Max(8)
+  @Min(MIN_GUESTS_AND_ROOMS_COUNT)
+  @Max(MAX_GUESTS_AND_ROOMS_COUNT)
     roomsCount: number;
 
-  @IsNumber()
   @IsInt()
-  @IsNotEmpty()
-  @Min(1)
-  @Max(8)
+  @Min(MIN_GUESTS_AND_ROOMS_COUNT)
+  @Max(MAX_GUESTS_AND_ROOMS_COUNT)
     guestsCount: number;
 
   @IsInt({ message: CreateOfferValidationMessage.price.invalidFormat })
-  @Min(100, { message: CreateOfferValidationMessage.price.minValue })
-  @Max(10000, { message: CreateOfferValidationMessage.price.maxValue })
+  @Min(MIN_PRICE, { message: CreateOfferValidationMessage.price.minValue })
+  @Max(MAX_PRICE, { message: CreateOfferValidationMessage.price.maxValue })
     price: number;
 
-  @IsArray()
-  @IsNotEmpty()
-  @ArrayMinSize(1)
+  @ArrayMinSize(MIN_FACILITIES_LENGTH)
   @IsEnum({ each: true, Facilities })
     facilities: Facilities[];
 

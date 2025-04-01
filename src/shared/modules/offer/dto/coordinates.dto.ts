@@ -1,13 +1,9 @@
-import { IsLatitude, IsLongitude, IsNumber, IsNotEmpty } from 'class-validator';
+import { IsLatitude, IsLongitude } from 'class-validator';
 
 export class CoordinatesDto {
-  @IsNumber()
-  @IsNotEmpty()
   @IsLatitude()
     latitude: number;
 
-  @IsNumber()
-  @IsNotEmpty()
   @IsLongitude()
     longitude: number;
 }
