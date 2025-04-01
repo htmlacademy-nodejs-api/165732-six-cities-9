@@ -18,6 +18,8 @@ import { ValidateObjectIdMiddleware } from '../../../rest/middleware/validate-ob
 import { ValidateDtoMiddleware } from '../../../rest/middleware/validate-dto.middleware.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { LoginUserDto } from './dto/login-user.dto.js';
+import { UpdateUserDto } from './dto/update-user.dto.js';
+import { UploadFileMiddleware } from '../../../rest/middleware/upload-file.middleware.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -31,9 +33,10 @@ export class UserController extends BaseController {
 
     this.addRoutes([
       { path: '/register', method: HttpMethod.Post, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateUserDto)] },
-      { path: '/:userId', method: HttpMethod.Post, handler: this.edit, middlewares: [new ValidateObjectIdMiddleware('userId')]},
+      { path: '/:userId', method: HttpMethod.Post, handler: this.edit, middlewares: [new ValidateObjectIdMiddleware('userId'), new ValidateDtoMiddleware(UpdateUserDto)]},
       { path: '/:userId/favorite', method: HttpMethod.Get, handler: this.findFavoritesByUser, middlewares: [new ValidateObjectIdMiddleware('userId')] },
-      { path: '/login', method: HttpMethod.Post, handler: this.login, middlewares: [new ValidateDtoMiddleware(LoginUserDto)] }
+      { path: '/login', method: HttpMethod.Post, handler: this.login, middlewares: [new ValidateDtoMiddleware(LoginUserDto)] },
+      {path: '/:userId/avatar', method: HttpMethod.Post, handler: this.uploadAvatar, middlewares: [new ValidateObjectIdMiddleware('userId'), new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar'),]}
     ]);
   }
 
@@ -81,5 +84,11 @@ export class UserController extends BaseController {
         'UserController',
       );
     }
+  }
+
+  public async uploadAvatar(req: Request, res: Response) {
+    this.created(res, {
+      filepath: req.file?.path
+    });
   }
 }
