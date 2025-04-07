@@ -16,23 +16,13 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       createdDate,
       name,
       email,
-      // image,
-      // type,
-      // price,
-      // linksList,
-      // password,
-      // avatarPath,
-      // userType,
-      // isPremium,
-      // isFavorite,
-      // ranking,
     ] = line.split('\t');
 
     return {
       title,
       description,
-      publicationDate: new Date(createdDate).toString(),
-      preview: 'wewee',
+      publicationDate: new Date(createdDate),
+      preview: 'preview.jpg',
       city: Cities.Cologne,
       linksList: ['link1.com', 'link2.com'],
       isPremium: true,
@@ -47,7 +37,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       },
       user: {
         email,
-        avatarPath: 'sdsdsd.jpg',
+        avatarPath: 'avatar.jpg',
         name,
         userType: UserType.Ordinary,
         favoriteOffersIds: [],
@@ -55,28 +45,6 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     };
   }
 
-  // private parseBoolean(booleanString: string): boolean {
-  //   if (booleanString === 'true') {
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
-  // private parselinksList(linksListString: string): string[] {
-  //   return linksListString.split(';').map((name) => name);
-  // }
-
-  // private parsePrice(priceString: string): number {
-  //   return Number.parseInt(priceString, 10);
-  // }
-
-  // private parseUser(name: string, email: string,
-  //   // avatarPath?: string, password?: string, type?: UserType
-  // ): Partial<User> {
-  //   return { name, email };
-  //   // avatarPath, password, type
-
-  // }
 
   public async read(): Promise<void> {
     const readStream = createReadStream(this.filename, { encoding: 'utf-8' });

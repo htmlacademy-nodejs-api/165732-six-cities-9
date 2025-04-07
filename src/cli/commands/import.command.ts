@@ -45,7 +45,6 @@ export class ImportCommand implements Command {
       await this.offerService.create({
         author: createdUser.id,
         ...rest,
-
       });
     }
   }
