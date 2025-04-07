@@ -34,7 +34,7 @@ export enum Cities {
 export type Offer = {
   title: string;
   description: string;
-  publicationDate: string;
+  publicationDate: Date;
   city: Cities;
   preview: string;
   linksList: string[];

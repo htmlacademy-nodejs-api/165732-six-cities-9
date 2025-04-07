@@ -44,8 +44,13 @@ export class DefaultOfferService implements OfferService {
       .exec();
   }
 
-  public async findIsPremiumByCity(city: string): Promise<OfferEntitiesNullable> {
+  public async findPremiumByCity(city: string): Promise<OfferEntitiesNullable> {
     return this.offerModel.find({city, isPremium: true}).exec();
+  }
+
+  public async exists(documentId: string): Promise<boolean> {
+    return (await this.offerModel
+      .exists({_id: documentId})) !== null;
   }
 }
 

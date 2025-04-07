@@ -23,13 +23,16 @@ export class OfferController extends BaseController {
     super(logger);
     this.logger.info('Register routes for OfferController…');
 
+    const validateObjectIdMiddleware = new ValidateObjectIdMiddleware('offerId');
+    const documentExistsMiddleware = new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId');
+
     this.addRoutes([
       { path: '/', method: HttpMethod.Post, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateOfferDto)] },
       { path: '/', method: HttpMethod.Get, handler: this.index },
-      { path: '/:offerId', method: HttpMethod.Get, handler: this.findbyId, middlewares: [new ValidateObjectIdMiddleware('offerId'), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')] },
-      { path: '/:offerId', method: HttpMethod.Put, handler: this.edit, middlewares: [new ValidateObjectIdMiddleware('offerId'), new ValidateDtoMiddleware(UpdateOfferDto), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')] },
-      { path: '/:offerId', method: HttpMethod.Delete, handler: this.delete, middlewares: [new ValidateObjectIdMiddleware('offerId'), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')] },
-      { path: '/:offerId/premium', method: HttpMethod.Get, handler: this.premiumForCity, middlewares: [new ValidateObjectIdMiddleware('offerId'), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')] }
+      { path: '/:offerId', method: HttpMethod.Get, handler: this.findbyId, middlewares: [validateObjectIdMiddleware, documentExistsMiddleware] },
+      { path: '/:offerId', method: HttpMethod.Put, handler: this.edit, middlewares: [validateObjectIdMiddleware, new ValidateDtoMiddleware(UpdateOfferDto), documentExistsMiddleware] },
+      { path: '/:offerId', method: HttpMethod.Delete, handler: this.delete, middlewares: [validateObjectIdMiddleware, documentExistsMiddleware] },
+      { path: '/premium', method: HttpMethod.Get, handler: this.premiumForCity, middlewares: [validateObjectIdMiddleware] }
     ]);
   }
 
@@ -60,7 +63,7 @@ export class OfferController extends BaseController {
   }
 
   public async premiumForCity(req: Request, res: Response): Promise<void> {
-    const result = await this.offerService.findIsPremiumByCity(req.params.offerId, req.body);
+    const result = await this.offerService.findPremiumByCity(req.body);
     const responseData = fillDTO(OfferRdo, result);
     this.ok(res, responseData);
   }

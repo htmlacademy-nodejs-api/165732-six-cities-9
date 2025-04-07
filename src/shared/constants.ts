@@ -1,5 +1,3 @@
-export const EMAIL_PATTERN = /^([\w-\\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-export const AVATAR_PATTERN = /(\W)(jpg|png)(\W)/;
 export const MIN_USER_NAME_LENGTH = 1;
 export const MAX_USER_NAME_LENGTH = 20;
 export const MIN_PASSWORD_LENGTH = 6;
@@ -12,10 +10,6 @@ export enum SortType {
   Down = -1,
   Up = 1,
 }
-
-export const NUMBER_HALF_SEPARATOR = 2;
-export const RATING_DECIMAL_PLACES_NUMBER = 1;
-export const COMMENTS_INCREMENT = 1;
 
 export const PASSWORD_MIN_LENGTH = 6;
 export const PASSWORD_MAX_LENGTH = 12;
@@ -45,3 +39,6 @@ export const MAX_COMMENT_TEXT_LENGTH = 1024;
 
 export const MIN_RATING = 1;
 export const MAX_RATING = 5;
+
+export const FIRST_WEEK_DAY = 1;
+export const LAST_WEEK_DAY = 7;
