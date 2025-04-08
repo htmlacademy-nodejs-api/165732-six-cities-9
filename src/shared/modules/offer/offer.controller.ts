@@ -13,6 +13,7 @@ import { ValidateDtoMiddleware } from '../../../rest/middleware/validate-dto.mid
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { DocumentExistsMiddleware } from '../../../rest/middleware/document-exists.middleware.js';
+import { PrivateRouteMiddleware } from '../../../rest/middleware/private-route.middleware.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -25,21 +26,22 @@ export class OfferController extends BaseController {
 
     const validateObjectIdMiddleware = new ValidateObjectIdMiddleware('offerId');
     const documentExistsMiddleware = new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId');
+    const privateRouteMiddleware = new PrivateRouteMiddleware();
 
     this.addRoutes([
-      { path: '/', method: HttpMethod.Post, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateOfferDto)] },
+      { path: '/', method: HttpMethod.Post, handler: this.create, middlewares: [privateRouteMiddleware, new ValidateDtoMiddleware(CreateOfferDto)] },
       { path: '/', method: HttpMethod.Get, handler: this.index },
       { path: '/:offerId', method: HttpMethod.Get, handler: this.findbyId, middlewares: [validateObjectIdMiddleware, documentExistsMiddleware] },
-      { path: '/:offerId', method: HttpMethod.Put, handler: this.edit, middlewares: [validateObjectIdMiddleware, new ValidateDtoMiddleware(UpdateOfferDto), documentExistsMiddleware] },
-      { path: '/:offerId', method: HttpMethod.Delete, handler: this.delete, middlewares: [validateObjectIdMiddleware, documentExistsMiddleware] },
+      { path: '/:offerId', method: HttpMethod.Patch, handler: this.edit, middlewares: [validateObjectIdMiddleware, new ValidateDtoMiddleware(UpdateOfferDto), documentExistsMiddleware] },
+      { path: '/:offerId', method: HttpMethod.Delete, handler: this.delete, middlewares: [privateRouteMiddleware, validateObjectIdMiddleware, documentExistsMiddleware] },
       { path: '/premium', method: HttpMethod.Get, handler: this.premiumForCity, middlewares: [validateObjectIdMiddleware] }
     ]);
   }
 
   public async create(
-    { body }: CreateOfferRequest,
+    { body, tokenPayload }: CreateOfferRequest,
     res: Response): Promise<void> {
-    const result = await this.offerService.create(body);
+    const result = await this.offerService.create({ ...body, author: tokenPayload.id });
     const offer = await this.offerService.findById(result.id);
     this.created(res, fillDTO(OfferRdo, offer));
   }
