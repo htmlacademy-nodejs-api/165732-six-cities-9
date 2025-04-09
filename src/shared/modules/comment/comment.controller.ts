@@ -10,6 +10,7 @@ import { fillDTO } from '../../utils/common.js';
 import { CommentRdo } from './rdo/comment.rdo.js';
 import { ValidateDtoMiddleware } from '../../../rest/middleware/validate-dto.middleware.js';
 import { CreateCommentDto } from './dto/create-comment.dto.js';
+import { PrivateRouteMiddleware } from '../../../rest/middleware/private-route.middleware.js';
 
 @injectable()
 export class CommentController extends BaseController {
@@ -20,7 +21,7 @@ export class CommentController extends BaseController {
     super(logger);
     this.logger.info('Register routes for CommentController...');
     this.addRoutes([
-      { path: '/', method: HttpMethod.Post, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateCommentDto)] },
+      { path: '/', method: HttpMethod.Post, handler: this.create, middlewares: [new PrivateRouteMiddleware(), new ValidateDtoMiddleware(CreateCommentDto)] },
       { path: '/', method: HttpMethod.Get, handler: this.index },
       { path: '/comments-count', method: HttpMethod.Get, handler: this.getCommentsCountByOfferId },
       { path: '/average-rate', method: HttpMethod.Get, handler: this.getAverageRateByOfferId }
@@ -28,9 +29,9 @@ export class CommentController extends BaseController {
   }
 
   public async create(
-    { body }: CreateCommentRequest,
+    { body, tokenPayload }: CreateCommentRequest,
     res: Response): Promise<void> {
-    const result = await this.commentService.create(body);
+    const result = await this.commentService.create({ ...body, author: tokenPayload.id });
     this.created(res, fillDTO(CommentRdo, result));
   }
 

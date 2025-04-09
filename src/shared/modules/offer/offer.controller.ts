@@ -32,8 +32,9 @@ export class OfferController extends BaseController {
     const privateRouteMiddleware = new PrivateRouteMiddleware();
     const validateAuthorMiddleware = new ValidateAuthorMiddleware(this.offerService, 'offerId');
 
+
     this.addRoutes([
-      { path: '/', method: HttpMethod.Post, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateOfferDto)] },
+      { path: '/', method: HttpMethod.Post, handler: this.create, middlewares: [privateRouteMiddleware, new ValidateDtoMiddleware(CreateOfferDto)] },
       { path: '/', method: HttpMethod.Get, handler: this.index },
       { path: '/:offerId', method: HttpMethod.Get, handler: this.findbyId, middlewares: [validateObjectIdMiddleware, documentExistsMiddleware] },
       { path: '/:offerId', method: HttpMethod.Patch, handler: this.edit, middlewares: [privateRouteMiddleware, validateObjectIdMiddleware, validateAuthorMiddleware, new ValidateDtoMiddleware(UpdateOfferDto), documentExistsMiddleware] },

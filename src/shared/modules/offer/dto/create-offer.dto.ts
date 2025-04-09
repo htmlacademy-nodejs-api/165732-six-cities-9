@@ -3,7 +3,7 @@ import { CreateOfferValidationMessage } from './create-offer.messages.js';
 import {
   IsDateString, IsEnum, IsInt, Max, MaxLength, Min, MinLength,
   ArrayMinSize, ArrayMaxSize, IsString, IsNotEmpty, IsBoolean,
-  IsMongoId, ValidateNested,
+  ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CoordinatesDto } from './coordinates.dto.js';
@@ -60,8 +60,7 @@ export class CreateOfferDto {
   @IsEnum({ each: true, Facilities })
     facilities: Facilities[];
 
-  @IsMongoId({ message: CreateOfferValidationMessage.author.invalidId })
-    author: string;
+  author: string;
 
   @ValidateNested()
   @Type(() => CoordinatesDto)
