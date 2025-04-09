@@ -26,7 +26,7 @@ export class DefaultOfferService implements OfferService {
   }
 
   public async findById(offerId: string): Promise<DocumentTypeOfferEntityNullable>{
-    return this.offerModel.findById(offerId).exec();
+    return this.offerModel.findById(offerId).populate(['author']).exec();
   }
 
   public async updateById(offerId: string, offer: UpdateOfferDto): Promise<DocumentTypeOfferEntityNullable> {
@@ -51,6 +51,16 @@ export class DefaultOfferService implements OfferService {
   public async exists(documentId: string): Promise<boolean> {
     return (await this.offerModel
       .exists({_id: documentId})) !== null;
+  }
+
+  public async documentAuthor(id: string): Promise<string | null> {
+    const offer = await this.offerModel.findById(id);
+
+    if (!offer) {
+      return null;
+    }
+
+    return offer.author.id;
   }
 }
 

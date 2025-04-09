@@ -9,6 +9,7 @@ import express, { Express } from 'express';
 import { Controller } from './controller/controller.interface.js';
 import { ExceptionFilter } from '../shared/libs/rest/exception-filter/exception-filter.interface.js';
 import { ParseTokenMiddleware } from '../shared/libs/rest/middleware/parse-token.middleware.js';
+import { UPLOAD_PATH } from '../shared/constants.js';
 
 @injectable()
 export class RestApplication {
@@ -32,7 +33,7 @@ export class RestApplication {
     const authenticateMiddleware = new ParseTokenMiddleware(this.config.get('JWT_SECRET'));
     this.server.use(express.json());
     this.server.use(
-      '/upload',
+      UPLOAD_PATH,
       express.static(this.config.get('UPLOAD_DIRECTORY'))
     );
     this.server.use(authenticateMiddleware.execute.bind(authenticateMiddleware));

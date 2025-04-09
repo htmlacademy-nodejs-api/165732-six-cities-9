@@ -8,7 +8,7 @@ import { Logger } from '../../libs/logger/logger-interface.js';
 import { LoginUserDto } from '../user/dto/login-user.dto.js';
 import { UserService } from '../user/dto/user-service.interface.js';
 import { UserEntity } from '../user/user.entity.js';
-import { TokenPayload } from './types/TokenPayload.js';
+import { TokenPayload } from './types/token-payload.js';
 import { Config } from '../../libs/config/config.interface.js';
 import { RestSchema } from '../../libs/config/rest.schema.js';
 import { UserNotFoundException } from './errors/user-not-found.exception.js';

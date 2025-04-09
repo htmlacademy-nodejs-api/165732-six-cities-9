@@ -23,6 +23,8 @@ export class CommentController extends BaseController {
     this.addRoutes([
       { path: '/', method: HttpMethod.Post, handler: this.create, middlewares: [new PrivateRouteMiddleware(), new ValidateDtoMiddleware(CreateCommentDto)] },
       { path: '/', method: HttpMethod.Get, handler: this.index },
+      { path: '/comments-count', method: HttpMethod.Get, handler: this.getCommentsCountByOfferId },
+      { path: '/average-rate', method: HttpMethod.Get, handler: this.getAverageRateByOfferId }
     ]);
   }
 
@@ -37,4 +39,15 @@ export class CommentController extends BaseController {
     const result = await this.commentService.findByOfferId(req.body.offerId);
     this.ok(res, fillDTO(CommentRdo, result));
   }
+
+  public async getCommentsCountByOfferId(req: Request, res: Response) {
+    const result = await this.commentService.calculateCommentsCountByOfferId(req.body.offerId);
+    this.ok(res, result);
+  }
+
+  public async getAverageRateByOfferId(req: Request, res: Response) {
+    const result = await this.commentService.calculateAverageRateByOfferId(req.body.offerId);
+    this.ok(res, result);
+  }
+
 }
