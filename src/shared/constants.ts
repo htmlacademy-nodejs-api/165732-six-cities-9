@@ -42,3 +42,8 @@ export const MAX_RATING = 5;
 
 export const FIRST_WEEK_DAY = 1;
 export const LAST_WEEK_DAY = 7;
+
+export const JWT_ALGORITHM = 'HS256';
+export const JWT_EXPIRED = '2d';
+
+export const UPLOAD_PATH = '/upload';
