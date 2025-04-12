@@ -238,7 +238,7 @@ paths:
         "409":
           description: id не существует.
 
-    put:
+    patch:
       tags:
         - offers
       summary: Редактирование предложения по аренде
